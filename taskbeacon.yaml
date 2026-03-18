@@ -1,0 +1,16 @@
+id: H000029
+slug: cambridge-gambling
+title: Cambridge Gambling Task
+acquisition: behavior
+variant: html
+cognitive_domain:
+  - decision_making
+  - risk_taking
+  - reward_processing
+maturity: prototype
+version:
+  release_tag: "0.1.0"
+contracts:
+  psyflow_web_taps: v0.1.0
+maintainer: []
+

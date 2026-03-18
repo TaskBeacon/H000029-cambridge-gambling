@@ -1,0 +1,314 @@
+subinfo_fields:
+  - name: subject_id
+    type: int
+    constraints:
+      min: 101
+      max: 999
+      digits: 3
+
+subinfo_mapping:
+  subject_id: 受试者编号（3位）
+  Participant Information: 被试信息
+  registration_failed: 注册失败
+  registration_successful: 注册成功
+  invalid_input: "{field} 输入无效"
+
+window:
+  size: [1280, 720]
+  units: pix
+  screen: 0
+  bg_color: black
+  fullscreen: true
+  fullscreen_lock_escape: true
+  monitor_width_cm: 35.5
+  monitor_distance_cm: 60
+
+task:
+  task_name: cambridge_gambling_preview
+  save_path: ./outputs/human
+  total_blocks: 2
+  total_trials: 72
+  trial_per_block: 36
+  conditions:
+    - gambling
+  key_list:
+    - f
+    - j
+    - "1"
+    - "2"
+    - "3"
+    - "4"
+    - "5"
+    - space
+  red_key: f
+  blue_key: j
+  bet_keys:
+    - "1"
+    - "2"
+    - "3"
+    - "4"
+    - "5"
+  seed_mode: same_across_sub
+  overall_seed: 2025
+  delta: 1
+  language: Chinese
+  voice_name: zh-CN-YunyangNeural
+  voice_enabled: false
+  input_mode: keyboard
+  hide_cursor: true
+  force_quit_enabled: true
+  force_quit_shortcut: ctrl+q
+  color_labels:
+    red: 红色
+    blue: 蓝色
+  order_labels:
+    ascending: 升序
+    descending: 降序
+
+timing:
+  fixation_duration: [0.3, 0.6]
+  color_choice_deadline: 3.0
+  bet_choice_deadline: 3.5
+  feedback_duration: 1.0
+  iti_duration: [0.3, 0.6]
+
+stimuli:
+  instruction_text:
+    type: text
+    text: |
+      剑桥赌博任务
+
+      每轮会显示 10 个红蓝方块（比例不同），黄色球随机藏在其中一个方块下。
+      第一步：判断球更可能在哪种颜色下。
+      第二步：选择要下注的百分比（基于当前分数）。
+
+      颜色选择：F=红色，J=蓝色。
+      下注选择：按 1-5 键，对应屏幕上从左到右的百分比。
+      若在下注阶段超时，将自动采用最后一个百分比。
+
+      按空格键开始。
+    color: white
+    height: 28
+    wrapWidth: 1100
+    pos: [0, 70]
+    font: SimHei
+
+  fixation:
+    type: text
+    text: "+"
+    color: white
+    height: 52
+    pos: [0, 0]
+    font: SimHei
+
+  trial_prompt:
+    type: text
+    text: "请判断黄色球更可能在哪种颜色下"
+    color: "#f2edb8"
+    height: 34
+    wrapWidth: 1100
+    pos: [0, 310]
+    font: SimHei
+
+  score_text:
+    type: text
+    text: "当前分数：{current_points}"
+    color: "#c7f2db"
+    height: 30
+    pos: [0, 265]
+    font: SimHei
+
+  ratio_text:
+    type: text
+    text: "本轮比例：红 {red_boxes} : 蓝 {blue_boxes}（{ratio_label}）"
+    color: "#e5e5e5"
+    height: 28
+    wrapWidth: 980
+    pos: [0, 220]
+    font: SimHei
+
+  color_key_hint:
+    type: text
+    text: "选择颜色：{red_key}=红色，{blue_key}=蓝色"
+    color: "#ebebeb"
+    height: 28
+    wrapWidth: 980
+    pos: [0, 80]
+    font: SimHei
+
+  box_token_template:
+    type: rect
+    width: 72
+    height: 72
+    fillColor: "#eb3a3a"
+    lineColor: "#f5f5f5"
+    pos: [0, 150]
+
+  bet_prompt:
+    type: text
+    text: "请选择下注比例（{order_label}）"
+    color: "#f5eb9e"
+    height: 32
+    wrapWidth: 1000
+    pos: [0, 115]
+    font: SimHei
+
+  bet_key_hint:
+    type: text
+    text: "按键对应：{bet_legend}。若超时将自动选择最后一个比例。"
+    color: "#e5e5e5"
+    height: 24
+    wrapWidth: 1080
+    pos: [0, -245]
+    font: SimHei
+
+  bet_option_template:
+    type: text
+    text: "5%"
+    color: "#f2f2f2"
+    height: 34
+    wrapWidth: 140
+    pos: [0, -70]
+    font: SimHei
+
+  feedback_outcome:
+    type: text
+    text: |
+      你选择了：{chosen_color_cn}
+      实际位置：{token_color_cn}
+      下注比例：{bet_percent}%（{bet_amount} 分）
+      本轮变化：{net_change_signed} 分
+      当前分数：{points_after}
+    color: white
+    height: 30
+    wrapWidth: 980
+    pos: [0, 35]
+    font: SimHei
+
+  feedback_auto_bet:
+    type: text
+    text: |
+      下注阶段超时，系统自动采用最后一个比例。
+      你选择了：{chosen_color_cn}
+      实际位置：{token_color_cn}
+      自动下注：{bet_percent}%（{bet_amount} 分）
+      本轮变化：{net_change_signed} 分
+      当前分数：{points_after}
+    color: "#ffdca1"
+    height: 28
+    wrapWidth: 1040
+    pos: [0, 35]
+    font: SimHei
+
+  feedback_color_timeout:
+    type: text
+    text: |
+      颜色判断超时，本轮不下注。
+      实际位置：{token_color_cn}
+      当前分数保持：{points_after}
+    color: "#ff7575"
+    height: 32
+    wrapWidth: 980
+    pos: [0, 20]
+    font: SimHei
+
+  block_break:
+    type: text
+    text: |
+      第 {block_num}/{total_blocks} 组完成
+
+      当前分数：{points_end}
+      本组净变化：{block_net_signed}
+      多数颜色选择率：{quality_rate}
+      胜率：{win_rate}
+      平均下注比例：{mean_bet_pct}%
+      颜色选择反应时：{mean_color_rt_ms} ms
+      下注反应时：{mean_bet_rt_ms} ms
+      颜色超时次数：{color_timeout_count}
+      下注超时次数：{bet_timeout_count}
+      延迟厌恶指标（降序-升序）：{delay_aversion_signed}
+
+      按空格键继续。
+    color: white
+    height: 25
+    wrapWidth: 1120
+    pos: [0, 0]
+    font: SimHei
+
+  good_bye:
+    type: text
+    text: |
+      任务结束
+
+      总试次数：{total_trials}
+      最终分数：{points_end}
+      全程净变化：{net_total_signed}
+      多数颜色选择率：{quality_rate}
+      胜率：{win_rate}
+      平均下注比例：{mean_bet_pct}%
+      升序平均下注：{ascending_mean_bet}%
+      降序平均下注：{descending_mean_bet}%
+      延迟厌恶指标（降序-升序）：{delay_aversion_signed}
+      颜色选择反应时：{mean_color_rt_ms} ms
+      下注反应时：{mean_bet_rt_ms} ms
+      颜色超时次数：{color_timeout_count}
+      下注超时次数：{bet_timeout_count}
+
+      按空格键退出。
+    color: white
+    height: 25
+    wrapWidth: 1120
+    pos: [0, 0]
+    font: SimHei
+
+triggers:
+  map:
+    exp_onset: 1
+    exp_end: 2
+    block_onset: 10
+    block_end: 11
+    fixation_onset: 20
+    choice_onset: 30
+    choice_red: 31
+    choice_blue: 32
+    color_timeout: 33
+    bet_onset: 40
+    bet_key_1: 41
+    bet_key_2: 42
+    bet_key_3: 43
+    bet_key_4: 44
+    bet_key_5: 45
+    bet_timeout: 46
+    feedback_onset: 50
+    iti_onset: 60
+
+  driver:
+    type: serial_url
+    url: loop://
+    baudrate: 115200
+
+  timing:
+    post_delay_ms: 1
+
+  policy:
+    strict: false
+
+controller:
+  fixation_duration: [0.3, 0.6]
+  color_choice_deadline: 3.0
+  bet_choice_deadline: 3.5
+  feedback_duration: 1.0
+  iti_duration: [0.3, 0.6]
+  initial_points: 100
+  box_ratios:
+    - [9, 1]
+    - [8, 2]
+    - [7, 3]
+    - [6, 4]
+  bet_options: [5, 25, 50, 75, 95]
+  block_order:
+    - ascending
+    - descending
+  random_seed: null
+  enable_logging: true
+
