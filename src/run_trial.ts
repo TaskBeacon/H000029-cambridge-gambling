@@ -50,10 +50,6 @@ function normalizeKey(value: unknown): string {
     .toLowerCase();
 }
 
-function sampleDuration(controller: Controller, value: unknown, fallback: number): number {
-  return controller.sample_duration(value, fallback);
-}
-
 function colorName(colorToken: string, labels: Record<string, unknown>): string {
   const token = normalizeKey(colorToken);
   if (token === COLOR_RED) {
@@ -275,20 +271,26 @@ export function run_trial(
   const orderLabels = toRecord(settings.order_labels);
   const orderLabel = String(orderLabels[spec.order] ?? spec.order);
 
-  const fixationDuration = sampleDuration(controller, settings.fixation_duration, 0.45);
+  const fixationDuration = (settings.fixation_duration as number | number[] | null | undefined) ?? [
+    0.3,
+    0.6
+  ];
   const colorDeadline = Math.max(
     0.2,
-    Number(settings.color_choice_deadline ?? controller.color_choice_deadline)
+    Number(settings.color_choice_deadline ?? 3.0)
   );
   const betDeadline = Math.max(
     0.2,
-    Number(settings.bet_choice_deadline ?? controller.bet_choice_deadline)
+    Number(settings.bet_choice_deadline ?? 3.5)
   );
   const feedbackDuration = Math.max(
     0.1,
-    Number(settings.feedback_duration ?? controller.feedback_duration)
+    Number(settings.feedback_duration ?? 1.0)
   );
-  const itiDuration = sampleDuration(controller, settings.iti_duration, 0.45);
+  const itiDuration = (settings.iti_duration as number | number[] | null | undefined) ?? [
+    0.3,
+    0.6
+  ];
 
   const fixation = trial.unit("fixation").addStim(stimBank.get("fixation"));
   set_trial_context(fixation, {
@@ -641,4 +643,3 @@ export function run_trial(
 
   return trial;
 }
-

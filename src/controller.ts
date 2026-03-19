@@ -141,11 +141,6 @@ function normalizeBlockOrder(value: unknown): BetOrder[] {
 }
 
 export class Controller {
-  readonly fixation_duration: number | number[];
-  readonly color_choice_deadline: number;
-  readonly bet_choice_deadline: number;
-  readonly feedback_duration: number;
-  readonly iti_duration: number | number[];
   readonly initial_points: number;
   readonly enable_logging: boolean;
   readonly box_ratios: Array<[number, number]>;
@@ -159,11 +154,6 @@ export class Controller {
   trial_count_block: number;
 
   constructor(args: {
-    fixation_duration?: number | number[];
-    color_choice_deadline?: number;
-    bet_choice_deadline?: number;
-    feedback_duration?: number;
-    iti_duration?: number | number[];
     initial_points?: number;
     box_ratios?: unknown;
     bet_options?: unknown;
@@ -171,11 +161,6 @@ export class Controller {
     random_seed?: number | null;
     enable_logging?: boolean;
   }) {
-    this.fixation_duration = args.fixation_duration ?? [0.3, 0.6];
-    this.color_choice_deadline = Math.max(0.2, toNumber(args.color_choice_deadline, 3.0));
-    this.bet_choice_deadline = Math.max(0.2, toNumber(args.bet_choice_deadline, 3.5));
-    this.feedback_duration = Math.max(0.1, toNumber(args.feedback_duration, 1.0));
-    this.iti_duration = args.iti_duration ?? [0.3, 0.6];
     this.initial_points = Math.max(1, toInt(args.initial_points, 100));
     this.enable_logging = args.enable_logging !== false;
     this.box_ratios = normalizeRatios(args.box_ratios);
@@ -195,11 +180,6 @@ export class Controller {
   static from_dict(config: Record<string, unknown>): Controller {
     const cfg = config ?? {};
     return new Controller({
-      fixation_duration: (cfg.fixation_duration as number | number[] | undefined) ?? [0.3, 0.6],
-      color_choice_deadline: toNumber(cfg.color_choice_deadline, 3.0),
-      bet_choice_deadline: toNumber(cfg.bet_choice_deadline, 3.5),
-      feedback_duration: toNumber(cfg.feedback_duration, 1.0),
-      iti_duration: (cfg.iti_duration as number | number[] | undefined) ?? [0.3, 0.6],
       initial_points: toInt(cfg.initial_points, 100),
       box_ratios: cfg.box_ratios,
       bet_options: cfg.bet_options,
@@ -221,20 +201,6 @@ export class Controller {
 
   next_trial_id(): number {
     return this.trial_count_total + 1;
-  }
-
-  sample_duration(value: unknown, fallback: number): number {
-    if (typeof value === "number" && Number.isFinite(value)) {
-      return Math.max(0, value);
-    }
-    if (Array.isArray(value) && value.length >= 2) {
-      const a = toNumber(value[0], fallback);
-      const b = toNumber(value[1], fallback);
-      const lower = Math.min(a, b);
-      const upper = Math.max(a, b);
-      return Math.max(0, lower + (upper - lower) * this.rng());
-    }
-    return Math.max(0, fallback);
   }
 
   private sample_ratio(): [number, number] {
@@ -337,4 +303,3 @@ export class Controller {
     );
   }
 }
-

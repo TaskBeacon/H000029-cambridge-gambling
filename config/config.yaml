@@ -18,8 +18,7 @@ window:
   units: pix
   screen: 0
   bg_color: black
-  fullscreen: true
-  fullscreen_lock_escape: true
+  fullscreen: false
   monitor_width_cm: 35.5
   monitor_distance_cm: 60
 
@@ -49,15 +48,10 @@ task:
     - "4"
     - "5"
   seed_mode: same_across_sub
-  overall_seed: 2025
   delta: 1
   language: Chinese
   voice_name: zh-CN-YunyangNeural
   voice_enabled: false
-  input_mode: keyboard
-  hide_cursor: true
-  force_quit_enabled: true
-  force_quit_shortcut: ctrl+q
   color_labels:
     red: 红色
     blue: 蓝色
@@ -76,7 +70,7 @@ stimuli:
   instruction_text:
     type: text
     text: |
-      剑桥赌博任务
+      剑桥赌博任务（Preview）
 
       每轮会显示 10 个红蓝方块（比例不同），黄色球随机藏在其中一个方块下。
       第一步：判断球更可能在哪种颜色下。
@@ -104,7 +98,7 @@ stimuli:
   trial_prompt:
     type: text
     text: "请判断黄色球更可能在哪种颜色下"
-    color: "#f2edb8"
+    color: [0.95, 0.93, 0.72]
     height: 34
     wrapWidth: 1100
     pos: [0, 310]
@@ -113,7 +107,7 @@ stimuli:
   score_text:
     type: text
     text: "当前分数：{current_points}"
-    color: "#c7f2db"
+    color: [0.78, 0.95, 0.86]
     height: 30
     pos: [0, 265]
     font: SimHei
@@ -121,7 +115,7 @@ stimuli:
   ratio_text:
     type: text
     text: "本轮比例：红 {red_boxes} : 蓝 {blue_boxes}（{ratio_label}）"
-    color: "#e5e5e5"
+    color: [0.9, 0.9, 0.9]
     height: 28
     wrapWidth: 980
     pos: [0, 220]
@@ -130,7 +124,7 @@ stimuli:
   color_key_hint:
     type: text
     text: "选择颜色：{red_key}=红色，{blue_key}=蓝色"
-    color: "#ebebeb"
+    color: [0.92, 0.92, 0.92]
     height: 28
     wrapWidth: 980
     pos: [0, 80]
@@ -147,7 +141,7 @@ stimuli:
   bet_prompt:
     type: text
     text: "请选择下注比例（{order_label}）"
-    color: "#f5eb9e"
+    color: [0.96, 0.92, 0.62]
     height: 32
     wrapWidth: 1000
     pos: [0, 115]
@@ -156,7 +150,7 @@ stimuli:
   bet_key_hint:
     type: text
     text: "按键对应：{bet_legend}。若超时将自动选择最后一个比例。"
-    color: "#e5e5e5"
+    color: [0.9, 0.9, 0.9]
     height: 24
     wrapWidth: 1080
     pos: [0, -245]
@@ -165,7 +159,7 @@ stimuli:
   bet_option_template:
     type: text
     text: "5%"
-    color: "#f2f2f2"
+    color: [0.95, 0.95, 0.95]
     height: 34
     wrapWidth: 140
     pos: [0, -70]
@@ -177,7 +171,7 @@ stimuli:
       你选择了：{chosen_color_cn}
       实际位置：{token_color_cn}
       下注比例：{bet_percent}%（{bet_amount} 分）
-      本轮变化：{net_change_signed} 分
+      本轮变化：{net_change:+d} 分
       当前分数：{points_after}
     color: white
     height: 30
@@ -192,9 +186,9 @@ stimuli:
       你选择了：{chosen_color_cn}
       实际位置：{token_color_cn}
       自动下注：{bet_percent}%（{bet_amount} 分）
-      本轮变化：{net_change_signed} 分
+      本轮变化：{net_change:+d} 分
       当前分数：{points_after}
-    color: "#ffdca1"
+    color: [1.0, 0.88, 0.62]
     height: 28
     wrapWidth: 1040
     pos: [0, 35]
@@ -206,7 +200,7 @@ stimuli:
       颜色判断超时，本轮不下注。
       实际位置：{token_color_cn}
       当前分数保持：{points_after}
-    color: "#ff7575"
+    color: [1.0, 0.45, 0.45]
     height: 32
     wrapWidth: 980
     pos: [0, 20]
@@ -218,15 +212,15 @@ stimuli:
       第 {block_num}/{total_blocks} 组完成
 
       当前分数：{points_end}
-      本组净变化：{block_net_signed}
-      多数颜色选择率：{quality_rate}
-      胜率：{win_rate}
-      平均下注比例：{mean_bet_pct}%
-      颜色选择反应时：{mean_color_rt_ms} ms
-      下注反应时：{mean_bet_rt_ms} ms
+      本组净变化：{block_net:+d}
+      多数颜色选择率：{quality_rate:.1%}
+      胜率：{win_rate:.1%}
+      平均下注比例：{mean_bet_pct:.1f}%
+      颜色选择反应时：{mean_color_rt_ms:.0f} ms
+      下注反应时：{mean_bet_rt_ms:.0f} ms
       颜色超时次数：{color_timeout_count}
       下注超时次数：{bet_timeout_count}
-      延迟厌恶指标（降序-升序）：{delay_aversion_signed}
+      延迟厌恶指标（降序-升序）：{delay_aversion:+.1f}
 
       按空格键继续。
     color: white
@@ -242,15 +236,15 @@ stimuli:
 
       总试次数：{total_trials}
       最终分数：{points_end}
-      全程净变化：{net_total_signed}
-      多数颜色选择率：{quality_rate}
-      胜率：{win_rate}
-      平均下注比例：{mean_bet_pct}%
-      升序平均下注：{ascending_mean_bet}%
-      降序平均下注：{descending_mean_bet}%
-      延迟厌恶指标（降序-升序）：{delay_aversion_signed}
-      颜色选择反应时：{mean_color_rt_ms} ms
-      下注反应时：{mean_bet_rt_ms} ms
+      全程净变化：{net_total:+d}
+      多数颜色选择率：{quality_rate:.1%}
+      胜率：{win_rate:.1%}
+      平均下注比例：{mean_bet_pct:.1f}%
+      升序平均下注：{ascending_mean_bet:.1f}%
+      降序平均下注：{descending_mean_bet:.1f}%
+      延迟厌恶指标（降序-升序）：{delay_aversion:+.1f}
+      颜色选择反应时：{mean_color_rt_ms:.0f} ms
+      下注反应时：{mean_bet_rt_ms:.0f} ms
       颜色超时次数：{color_timeout_count}
       下注超时次数：{bet_timeout_count}
 
@@ -281,24 +275,16 @@ triggers:
     bet_timeout: 46
     feedback_onset: 50
     iti_onset: 60
-
   driver:
     type: serial_url
     url: loop://
     baudrate: 115200
-
   timing:
     post_delay_ms: 1
-
   policy:
     strict: false
 
 controller:
-  fixation_duration: [0.3, 0.6]
-  color_choice_deadline: 3.0
-  bet_choice_deadline: 3.5
-  feedback_duration: 1.0
-  iti_duration: [0.3, 0.6]
   initial_points: 100
   box_ratios:
     - [9, 1]
@@ -311,4 +297,3 @@ controller:
     - descending
   random_seed: null
   enable_logging: true
-
